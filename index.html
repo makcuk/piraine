@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+   <head>
+    <title>PiRaine</title> 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css" />
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>
+
+
+     <script type="text/javascript">
+$(document).on('pagebeforeshow', '#dashboard', function(){ 
+    $.getJSON( "/zones", function( data ) {
+      var items = [];
+      $('#zones-list').empty();
+      $.each( data, function(index, zone) {
+        console.log(zone);
+        if (zone["water"]) {
+        $('#zones-list').append( "<li id='" + index + "'><a href=\"#\"><img src=\"/static/water.png\" class=\"ui-li-icon ui-corner-none\"> " + zone["zone_desc"] + "</a></li>" );
+        } else {
+        $('#zones-list').append( "<li id='" + index + "'><a href=\"#\"><img src=\"/static/valve.png\" class=\"ui-li-icon ui-corner-none\"> " + zone["zone_desc"] + "</a></li>" );
+        }
+        $('#zones-list').listview('refresh');  
+/*        if (zone["water"]) {
+            $('#zones-states').append( "<li id='" + index + "'>" + "watering </li>" );
+        } else {
+            $('#zones-states').append( "<li id='" + index + "'>" + "off </li>" );
+        }
+
+        $('#zones-edit').append('<li id='+ index+ '> <a href="/edit" data-role="button" data-icon="arrow-r">Edit</a></li>')
+    */
+      });
+     
+//      $( "<ul/>", {
+//       "class": "my-new-list",
+//        html: items.join( "" )
+//      }).appendTo( "body" );
+    });
+
+       });
+    </script>
+   </head>
+   <body>
+<div data-role="page" id="dashboard">
+
+    <div data-role="header">
+        <h1>Dashboard</h1>
+    </div><!-- /header -->
+
+    <div data-role="content">   
+
+<ul data-role="listview" data-inset="true" data-filter="false" id="zones-list">
+
+</ul>
+
+    </div><!-- /content -->
+
+</div><!-- /page -->
+   </body>
+</html>
+
