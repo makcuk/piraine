@@ -27,6 +27,7 @@ if __name__ == "__main__":
              'tools.staticdir.dir': os.getcwd()+'/public'
          }
      }
+    cherrypy.server.socket_host = '0.0.0.0'
 
     Monitor(cherrypy.engine, table.current, frequency=60).subscribe()
     cherrypy.quickstart(WebInterface(), '/', conf)

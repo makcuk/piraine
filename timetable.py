@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 import json
+import RPi.GPIO as GPIO
 
 class CronEntry:
     def __init__(self, zone, start_time, duration = 30):
@@ -19,11 +22,15 @@ class Zone:
         self.water = False
 
     def run(self):
-        if not self.water: print "RPI.set_port(%s,1)" % self.zone_port
+        if not self.water:
+            GPIO.setup(self.zone_port, GPIO.OUT)
+            GPIO.output(self.zone_port, GPIO.HIGH)
         self.water = True
 
     def stop(self):
-        if self.water: print "RPI.set_port(%s, 0)" % self.zone_port
+        if self.water:
+            GPIO.setup(self.zone_port, GPIO.OUT)
+            GPIO.output(self.zone_port, GPIO.LOW)
         self.water = False
 
     def __repr__(self):
@@ -33,10 +40,12 @@ class Zone:
 class Table(object):
     def __init__(self):
 
+        GPIO.setmode(GPIO.BOARD)
+
         self.table = [
-            CronEntry(Zone('zone_fence_south', 'South fence zone', 1), datetime.datetime(1,1,1,23,0), 45),
-            CronEntry(Zone('zone_fence_north', 'North fence zone and center', 2), datetime.datetime(1,1,1,22,45), 45),
-            CronEntry(Zone('zone_fence_west', 'West fence zone and center', 2), datetime.datetime(1,1,1,14,45), 45),
+            CronEntry(Zone('zone_fence_south', u'Южный забор', 5), datetime.datetime(1,1,1,23,0), 45),
+            CronEntry(Zone('zone_fence_north', 'Северный забор', 6), datetime.datetime(1,1,1,22,45), 45),
+            CronEntry(Zone('zone_fence_west', 'Центральная часть', 7), datetime.datetime(1,1,1,19,25), 45),
         ]
 
     def next_entry(self):
